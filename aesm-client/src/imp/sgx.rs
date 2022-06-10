@@ -17,7 +17,8 @@ impl Clone for AesmClient {
 
 impl AesmClient {
     fn open_socket(&self) -> Result<TcpStream> {
-        let sock = self.tcp_stream.try_clone().unwrap();
+        /* let sock = self.tcp_stream.try_clone().unwrap(); */
+        let sock = TcpStream::connect("aesm").unwrap();
         // FIXME: uncomment this after resolving https://github.com/fortanix/rust-sgx/issues/31
         // let _ = sock.set_write_timeout(Some(Duration::from_micros(LOCAL_AESM_TIMEOUT_US as _)))?;
         Ok(sock)

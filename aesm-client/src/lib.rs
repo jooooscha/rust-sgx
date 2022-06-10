@@ -38,6 +38,9 @@ use sgxs::einittoken::{Einittoken, EinittokenProvider};
 #[cfg(all(not(target_env = "sgx"),feature = "sgxs"))]
 use sgx_isa::{Attributes, Sigstruct};
 
+extern crate serde;
+use serde::{Serialize, Deserialize};
+
 include!(concat!(env!("OUT_DIR"), "/mod_aesm_proto.rs"));
 mod error;
 use self::aesm_proto::*;
@@ -98,7 +101,7 @@ impl QuoteType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub struct QuoteInfo {
     target_info: Vec<u8>,
     pub_key_id: Vec<u8>,
@@ -142,7 +145,7 @@ fn quote_buffer_size(sig_rl: &[u8]) -> u32 {
     quote_length + sig_length
 }
 
-#[derive(Debug, Clone, Eq, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize)]
 pub struct QuoteResult {
     /// For Intel attestatations, the EPID signature from Intel QE.
     quote: Vec<u8>,
